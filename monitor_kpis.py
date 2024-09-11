@@ -6,11 +6,12 @@ from google.cloud import monitoring_v3
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 
-# Configuration for metric types
+# Configuration for cloud-level metric types
 METRICS = {
-    'cpu': 'compute.googleapis.com/instance/disk/write_bytes_count',  # Change to CPU metric
-    'memory': 'compute.googleapis.com/instance/memory/usage',
-    'disk_io': 'compute.googleapis.com/instance/disk/read_bytes_count'
+    'network': 'compute.googleapis.com/compute/instance/network/received_bytes_count',  # Network usage
+    'error_rate': 'cloudfunctions.googleapis.com/function/execution_count',  # Example error rate metric
+    'latency': 'cloudfunctions.googleapis.com/function/latency',  # Example latency metric
+    'uptime': 'compute.googleapis.com/instance/disk/uptime',  # Example uptime metric
 }
 
 def initialize_client():
@@ -60,10 +61,11 @@ def monitor_kpis(metric_key):
     return {metric_type.split('/')[-1]: kpi_data}  # Return data with metric name as key
 
 if __name__ == "__main__":
-    # Example of calling one of the monitoring functions
+    # Example of calling the monitoring functions
     try:
-        print(monitor_kpis('cpu'))  # Call the CPU monitoring function
-        print(monitor_kpis('memory'))  # Call the Memory monitoring function
-        print(monitor_kpis('disk_io'))  # Call the Disk I/O monitoring function
+        print(monitor_kpis('network'))  # Call the Network monitoring function
+        print(monitor_kpis('error_rate'))  # Call the Error Rate monitoring function
+        print(monitor_kpis('latency'))  # Call the Latency monitoring function
+        print(monitor_kpis('uptime'))  # Call the Uptime monitoring function
     except Exception as e:
         logging.error(f"Failed to monitor KPIs: {e}")
